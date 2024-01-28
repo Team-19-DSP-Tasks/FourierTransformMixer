@@ -484,10 +484,38 @@ class Image_Processing_App(Images):
         and replots all FFT components based on the selected mode.
         """
         selected_item = self.ui.selectMode.currentText()
+        # Check the current items
+        current_items = [
+            self.ui.ftCombonentComboBox.itemText(i)
+            for i in range(self.ui.ftCombonentComboBox.count())
+        ]
+        if selected_item == "Magnitude and Phase":
+            if "Magnitude" not in current_items:
+                self.ui.ftCombonentComboBox.addItem("Magnitude")
+            if "Phase" not in current_items:
+                self.ui.ftCombonentComboBox.addItem("Phase")
+            self.ui.ftCombonentComboBox.removeItem(
+                self.ui.ftCombonentComboBox.findText("Real")
+            )
+            self.ui.ftCombonentComboBox.removeItem(
+                self.ui.ftCombonentComboBox.findText("Imaginary")
+            )
+            fft_component = "Magnitude"
 
-        fft_component = self.change_combobox_mode(selected_item)
+        elif selected_item == "Real and Imaginary":
+            if "Real" not in current_items:
+                self.ui.ftCombonentComboBox.addItem("Real")
+            if "Imaginary" not in current_items:
+                self.ui.ftCombonentComboBox.addItem("Imaginary")
+            self.ui.ftCombonentComboBox.removeItem(
+                self.ui.ftCombonentComboBox.findText("Magnitude")
+            )
+            self.ui.ftCombonentComboBox.removeItem(
+                self.ui.ftCombonentComboBox.findText("Phase")
+            )
+            fft_component = "Real"
 
-        # When mode is Switched replot all of the fft_components according to the mode
+            # When mode is Switched replot all of the fft_components according to the mode
         for fft_canvas_id in self.fftCanvas_mapping.keys():
             image_instance = self.image_instances.get(
                 fft_canvas_id.replace("fft", "input")
@@ -498,14 +526,6 @@ class Image_Processing_App(Images):
                     fft_canvas_id,
                     self.fftCanvas_mapping,
                 )
-
-    def change_combobox_mode(self, selected_mode):
-        combonents = selected_mode.split()
-        print(combonents)
-        self.ui.ftCombonentComboBox.clear()
-        self.ui.ftCombonentComboBox.addItems([combonents[0], combonents[2]])
-        fft_component = combonents[0]
-        return fft_component
 
     def brightness_contrast(self, event):
         """

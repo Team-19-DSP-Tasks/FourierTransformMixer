@@ -14,7 +14,7 @@ from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtGui import QIcon
 
-from ftMixerBackend_spare import Image_Processing_App
+from ftMixerBackend import Image_Processing_App
 
 
 class Ui_MainWindow(object):
